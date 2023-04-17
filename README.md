@@ -57,6 +57,9 @@ The easiest way to start a new (read-write) transaction is to use the `Update()`
 ```go
 err := db.Update(func(tx *rocketdb.Tx) error {
     ...
+    tx.Set("key", "value")
+    ...
+    tx.Remove("key1")
     return nil
 })
 ```
@@ -65,6 +68,8 @@ or, for read-only transactions, the `View()` method:
 
 ```go
 err := db.View(func(tx *rocketdb.Tx) error {
+    ...
+    value, _ := tx.Get("key")
     ...
     return nil
 })

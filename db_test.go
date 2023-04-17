@@ -73,6 +73,15 @@ func TestAtomicIncr(t *testing.T) {
 		}(i)
 	}
 	wg.Wait()
+
+	var finalValue string
+	err = db.View(func(tx *rocketdb.Tx) error {
+		val, err := tx.Get(count)
+		finalValue = val
+		return err
+	})
+	require.NoError(t, err)
+	require.Equal(t, n, bytesToInt([]byte(finalValue)))
 }
 
 func intToByte(i int) []byte {
